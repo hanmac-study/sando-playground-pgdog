@@ -1,0 +1,12 @@
+#
+# Basic users configuration.
+#
+[[users]]
+name = "pgdog"
+database = "pgdog"
+password = "pgdog"
+
+[[users]]
+name = "pgdog"
+database = "pgdog_sharded"
+password = "pgdog"

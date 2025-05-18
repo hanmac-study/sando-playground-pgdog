@@ -1,0 +1,74 @@
+[general]
+query_timeout = 1_000
+checkout_timeout = 1_000
+connect_timeout = 1_000
+load_balancing_strategy = "round_robin"
+rollback_timeout = 1_000
+read_write_strategy = "aggressive"
+
+[[databases]]
+name = "pgdog"
+host = "127.0.0.1"
+
+[[databases]]
+name = "pgdog"
+host = "127.0.0.1"
+role = "replica"
+read_only = true
+
+[[databases]]
+name = "pgdog_sharded"
+host = "127.0.0.1"
+database_name = "shard_0"
+shard = 0
+
+[[databases]]
+name = "pgdog_sharded"
+host = "127.0.0.1"
+database_name = "shard_1"
+shard = 1
+
+[[databases]]
+name = "failover"
+host = "127.0.0.1"
+port = 5435
+role = "primary"
+database_name = "pgdog"
+
+[[databases]]
+name = "failover"
+host = "127.0.0.1"
+port = 5436
+role = "replica"
+database_name = "pgdog"
+read_only = true
+
+[[databases]]
+name = "failover"
+host = "127.0.0.1"
+port = 5437
+role = "replica"
+database_name = "pgdog"
+read_only = true
+
+[[databases]]
+name = "failover"
+host = "127.0.0.1"
+port = 5438
+role = "replica"
+database_name = "pgdog"
+read_only = true
+
+[[sharded_tables]]
+database = "pgdog_sharded"
+name = "sharded"
+column = "id"
+data_type = "bigint"
+primary = true
+
+[[omnisharded_tables]]
+database = "pgdog_sharded"
+tables = ["sharded_omni"]
+
+[admin]
+password = "pgdog"

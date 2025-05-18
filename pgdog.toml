@@ -1,0 +1,113 @@
+#
+# PgDog configuration.
+#
+[general]
+host = "0.0.0.0"
+port = 6432
+shutdown_timeout = 5_000
+openmetrics_port = 9090
+idle_healthcheck_delay = 2342343243
+read_write_strategy = "aggressive"
+
+#
+# Admin database password.
+#
+[admin]
+password = "pgdog"
+
+#
+# Simple database.
+#
+[[databases]]
+name = "pgdog"
+host = "127.0.0.1"
+port = 5432
+role = "primary"
+
+[[databases]]
+name = "pgdog"
+host = "127.0.0.1"
+port = 5432
+role = "replica"
+read_only = true
+
+[tcp]
+retries = 3
+time = 1000
+interval = 1000
+user_timeout = 1000
+
+
+#
+# Sharded cluster with two primaries.
+#
+[[databases]]
+name = "pgdog_sharded"
+host = "127.0.0.1"
+database_name = "shard_0"
+shard = 0
+role = "primary"
+
+[[databases]]
+name = "pgdog_sharded"
+host = "127.0.0.1"
+database_name = "shard_1"
+shard = 1
+role = "primary"
+
+[[databases]]
+name = "pgdog_sharded"
+host = "127.0.0.1"
+database_name = "shard_0"
+shard = 0
+role = "replica"
+
+[[databases]]
+name = "pgdog_sharded"
+host = "127.0.0.1"
+database_name = "shard_1"
+shard = 1
+role = "replica"
+
+#
+# Read/write access to theses tables will be automatically
+# sharded.
+#
+[[sharded_tables]]
+database = "pgdog_sharded"
+name = "sharded"
+column = "id"
+data_type = "bigint"
+primary = true
+
+
+#
+# ActiveRecord sends these queries
+# at startup to figure out the schema.
+#
+# This will route them to only one shard instead of issuing
+# cross-shard queries and getting incorrect results.
+#
+[[manual_queries]]
+fingerprint = "e78fe2c08de5f079" #[16685804461073231993]
+
+[[manual_queries]]
+fingerprint = "43258d068030bb3e" #[4838428433739463486]
+
+[[manual_queries]]
+fingerprint = "08aab2cee482a97d" #[624508100011010429]
+
+[[manual_queries]]
+fingerprint = "23cd60d5972d1712" #[2579824632033777426]
+
+[[manual_queries]]
+fingerprint = "bb38525ebeb46656" #[13490623250668217942]
+
+[[manual_query]]
+fingerprint = "f4814b6fadabc4c1" #[17618446160277259457]
+
+[[manual_query]]
+fingerprint = "04dc05f480b702d3"
+
+[multi_tenant]
+column = "tenant_id"
