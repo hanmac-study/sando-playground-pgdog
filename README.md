@@ -20,7 +20,7 @@ cd pgdog
 docker-compose up --build
 ```
 
-### 3. PostgreSQL 접속속
+### 3. PostgreSQL 접속
 ```bash 
 psql -h localhost -p 6432 -U postgres
 ```
